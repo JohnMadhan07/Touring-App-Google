@@ -8,7 +8,7 @@ const Users = () => {
       email: "madhan@gmail.com",
       image:
         "Me.jpg",
-      placecount: 3,
+      placecount: 1,
     },
     // { id: 2, name: "Ann", email: "Ann@gmail.com", placecount: 2 },
     // { id: 3, name: "Nandhu", email: "Nandhu@gmail.com", placecount: 1 },
