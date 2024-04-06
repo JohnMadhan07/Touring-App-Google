@@ -6,8 +6,7 @@ const Users = () => {
       id: "U1",
       name: "Madhan",
       email: "madhan@gmail.com",
-      image:
-        "Me.jpg",
+      image: "Me.jpg",
       placecount: 1,
     },
     // { id: 2, name: "Ann", email: "Ann@gmail.com", placecount: 2 },
