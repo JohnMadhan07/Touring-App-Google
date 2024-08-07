@@ -4,10 +4,19 @@
   "private": true,
   "dependencies": {
     "@react-google-maps/api": "^2.19.3",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
+    "@tanstack/react-query": "^5.36.2",
+    "@tanstack/react-query-devtools": "^5.36.2",
+    "axios": "^1.6.8",
+    "express": "^4.19.2",
+    "lighthouse": "^11.7.0",
+    "node-fetch": "^3.3.2",
+    "open": "^10.1.0",
+    "puppeteer": "^22.6.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^5.0.1",
+    "request": "^2.88.2",
     "use-places-autocomplete": "^4.0.1"
   },
   "scripts": {
