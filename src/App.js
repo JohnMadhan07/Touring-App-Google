@@ -4,10 +4,10 @@ import {
   Route,
   Switch
 } from 'react-router-dom';
-import Users from './user/pages/Users';
+import Places from './user/pages/Places';
 import Place from './places/pages/Place';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
-import Directions from './Maps/Directions'; // Import the Directions component
+import Directions from './Maps/Directions'; 
 import './shared/components/Navigation/MainNavigation.css';
 
 const App = () => {
@@ -17,13 +17,13 @@ const App = () => {
       <main>
         <Switch>
           <Route path="/" exact>
-            <Users />
+            <Places />
           </Route>
           <Route path="/:userId/place" exact>
             <Place />
           </Route>
           <Route path="/directions" exact>
-            <Directions /> {/* Add the Directions component route */}
+            <Directions /> 
           </Route>
         </Switch>
       </main>
