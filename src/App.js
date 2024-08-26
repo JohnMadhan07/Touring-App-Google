@@ -4,7 +4,7 @@ import {
   Route,
   Switch
 } from 'react-router-dom';
-import Places from './user/pages/Places';
+import Places from './places/pages/Places';
 import Place from './places/pages/Place';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import Directions from './Maps/Directions'; 
