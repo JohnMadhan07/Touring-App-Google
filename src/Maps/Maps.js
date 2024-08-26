@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import "./Maps.css";
-
+const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 const mapContainerStyle = {
   width: '50vw',
   height: '50vh',
@@ -21,7 +21,7 @@ const Map = () => {
   const [mapRenderDuration, setMapRenderDuration] = useState(null);
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyALsQw8m8XlCfbhB5zanyEkpSaqqTg0cDE',
+    googleMapsApiKey: apiKey,
     libraries: ['places'],
   });
 
