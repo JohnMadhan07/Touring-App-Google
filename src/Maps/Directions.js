@@ -1,90 +1,79 @@
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { GoogleMap, useLoadScript, Marker, DirectionsRenderer } from '@react-google-maps/api';
+import './Maps.css';
 
-// const Directions = () => {
-//   const [routeData, setRouteData] = useState(null);
-//   const [placesData, setPlacesData] = useState(null);
-//   const apiKey = 'AIzaSyALsQw8m8XlCfbhB5zanyEkpSaqqTg0cDE';
+const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+const mapContainerStyle = { width: '50vw', height: '50vh' };
+const defaultCenter = { lat: 52.2593, lng: -7.1101 };
 
-//   useEffect(() => {
-//     const fetchDirections = async () => {
-//       try {
-//         // Make a request to your server endpoint for directions
-//         const response = await fetch('/directions');
+const DirectionsMap = () => {
+  const [directions, setDirections] = useState(null);
+  const [distance, setDistance] = useState(null);
+  const [calculationTime, setCalculationTime] = useState(null);
+  const [directionsRequest, setDirectionsRequest] = useState(null);
 
-//         if (!response.ok) {
-//           throw new Error('Failed to fetch directions');
-//         }
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: apiKey,
+    libraries: ['places'],
+  });
 
-//         const data = await response.json();
+  useEffect(() => {
+    if (isLoaded && directionsRequest) {
+      const startTime = new Date(); // Start timing
 
-//         // Set the route data state
-//         setRouteData(data);
-//       } catch (error) {
-//         console.error('Error fetching directions:', error);
-//       }
-//     };
+      const directionsService = new window.google.maps.DirectionsService();
+      directionsService.route(directionsRequest, (result, status) => {
+        const endTime = new Date(); // End timing
+        const elapsedTime = (endTime - startTime) / 1000; // Calculate elapsed time in seconds
 
-//     const fetchPlaces = async () => {
-//       try {
-//         const requestBody = {
-//           query: 'restaurants in New York', // Example query
-//           // Add other parameters as needed
-//         };
+        if (status === 'OK') {
+          setDirections(result);
+          setCalculationTime(elapsedTime.toFixed(2)); // Save the elapsed time
+          
+          // Extracting distance from the response
+          const route = result.routes[0];
+          const leg = route.legs[0];
+          setDistance(leg.distance.text); // e.g., "15.3 km"
+        } else {
+          console.error('Error fetching directions:', status);
+        }
+      });
+    }
+  }, [isLoaded, directionsRequest]);
 
-//         const response = await axios.post(
-//           `https://places.googleapis.com/v1/places:newyork?key=${apiKey}`,
-//           requestBody,
-//           {
-//             headers: {
-//               'Content-Type': 'application/json',
-//             },
-//           }
-//         );
+  const handleCalculateRoute = () => {
+    setDirectionsRequest({
+      origin: { lat: 52.2593, lng: -7.1101 },
+      destination: { lat: 53.4557, lng: -7.138704504048729 },
+      travelMode: window.google.maps.TravelMode.DRIVING,
+    });
+  };
 
-//         if (response.status !== 200) {
-//           throw new Error('Failed to fetch places');
-//         }
+  if (!isLoaded) return <div>Loading maps</div>;
+  if (loadError) return <div>Error loading maps</div>;
 
-//         const data = response.data;
+  return (
+    <div>
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        zoom={10}
+        center={defaultCenter}
+      >
+        <Marker position={defaultCenter} />
+        <Marker position={{ lat: 52.24619711998666, lng: -7.138704504048729 }} />
+        {directions && <DirectionsRenderer directions={directions} />}
+      </GoogleMap>
+      <button id="direct" className="calculate-route" onClick={handleCalculateRoute}>Calculate Route</button>
 
-//         // Set the places data state
-//         setPlacesData(data);
-//       } catch (error) {
-//         console.error('Error fetching places:', error);
-//       }
-//     };
+      {/* Display the distance and route calculation time */}
+      {distance && calculationTime && (
+        <div>
+          <p>Distance: {distance}</p>
+          <p>Time to calculate route: {calculationTime} seconds</p>
+        </div>
+      )}
+    </div>
+  );
+};
 
-//     // Fetch directions and places when the component mounts
-//     fetchDirections();
-//     fetchPlaces();
-//   }, []);
-
-//   return (
-//     <div>
-//       {routeData ? (
-//         <div>
-//           <p>Route Distance: {routeData.routes[0].legs[0].distance.text}</p>
-//           <p>Route Duration: {routeData.routes[0].legs[0].duration.text}</p>
-//         </div>
-//       ) : (
-//         <p>Loading route data...</p>
-//       )}
-//       {placesData ? (
-//         <div>
-//           {/* Render places data here */}
-//           <p>Places Results:</p>
-//           <ul>
-//             {placesData.results.map((place, index) => (
-//               <li key={index}>{place.name}</li>
-//             ))}
-//           </ul>
-//         </div>
-//       ) : (
-//         <p>Loading places data...</p>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Directions;
+export default DirectionsMap;
