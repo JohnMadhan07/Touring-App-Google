@@ -8,7 +8,7 @@ const defaultCenter = { lat: 52.2593, lng: -7.1101 };
 
 const SearchMap = () => {
   const [selectedPlace, setSelectedPlace] = useState(null);
-  const [searchDuration, setSearchDuration] = useState(null); // State to hold the search duration in seconds
+  const [searchDuration, setSearchDuration] = useState(null); 
   const searchBoxRef = useRef(null);
   const mapRef = useRef(null);
   const searchStartTime = useRef(null); // Ref to track the start time
@@ -37,10 +37,10 @@ const SearchMap = () => {
     // Center the map to the selected place
     if (mapRef.current) {
       mapRef.current.panTo({ lat: location.lat(), lng: location.lng() });
-      mapRef.current.setZoom(15); // Optional: zoom into the location
+      mapRef.current.setZoom(15); 
     }
 
-    // Calculate and set the search duration in seconds
+
     const endTime = performance.now();
     const durationInSeconds = (endTime - searchStartTime.current) / 1000;
     setSearchDuration(durationInSeconds);

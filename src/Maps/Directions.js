@@ -19,21 +19,21 @@ const DirectionsMap = () => {
 
   useEffect(() => {
     if (isLoaded && directionsRequest) {
-      const startTime = new Date(); // Start timing
+      const startTime = new Date(); 
 
       const directionsService = new window.google.maps.DirectionsService();
       directionsService.route(directionsRequest, (result, status) => {
         const endTime = new Date(); // End timing
-        const elapsedTime = (endTime - startTime) / 1000; // Calculate elapsed time in seconds
+        const elapsedTime = (endTime - startTime) / 1000; // Calculate time in seconds
 
         if (status === 'OK') {
           setDirections(result);
-          setCalculationTime(elapsedTime.toFixed(2)); // Save the elapsed time
+          setCalculationTime(elapsedTime.toFixed(2)); 
           
           // Extracting distance from the response
           const route = result.routes[0];
           const leg = route.legs[0];
-          setDistance(leg.distance.text); // e.g., "15.3 km"
+          setDistance(leg.distance.text);
         } else {
           console.error('Error fetching directions:', status);
         }
@@ -65,7 +65,7 @@ const DirectionsMap = () => {
       </GoogleMap>
       <button id="direct" className="calculate-route" onClick={handleCalculateRoute}>Calculate Route</button>
 
-      {/* Display the distance and route calculation time */}
+     
       {distance && calculationTime && (
         <div>
           <p>Distance: {distance}</p>

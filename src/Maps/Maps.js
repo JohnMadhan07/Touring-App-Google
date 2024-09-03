@@ -27,7 +27,6 @@ const Map = () => {
 
   const onMapLoad = map => {
     setMap(map);
-    // Record the start time of the initial map render
     setMapRenderStartTime(new Date());
   };
 
