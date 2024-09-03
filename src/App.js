@@ -9,6 +9,7 @@ import Place from './places/pages/Place';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 import Directions from './Maps/Directions'; 
 import './shared/components/Navigation/MainNavigation.css';
+import Search from './Maps/Search';
 
 const App = () => {
   return (
@@ -24,6 +25,9 @@ const App = () => {
           </Route>
           <Route path="/directions" exact>
             <Directions /> 
+          </Route>
+          <Route path="/search" exact>
+            <Search /> 
           </Route>
         </Switch>
       </main>

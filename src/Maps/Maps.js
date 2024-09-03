@@ -83,7 +83,7 @@ const Map = () => {
         {/* Marker for panned location (if markerPosition is set) */}
         {markerPosition && <Marker position={markerPosition} />}
       </GoogleMap>
-      <button className="panzoom" onClick={handlePanAndZoom}>Pan and Zoom</button>
+      <button id="panzoom" className="panzoom" onClick={handlePanAndZoom}>Pan and Zoom</button>
       {mapRenderDuration && <div>Map render duration: {mapRenderDuration} seconds</div>}
       {actionDuration && <div>Action duration: {actionDuration} seconds</div>}
     </div>
