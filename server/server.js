@@ -1,36 +1,45 @@
 const express = require('express');
 const request = require('request');
 const app = express();
+const apiKey = ''; 
 
 let cachedRouteData = null;
 let cacheTimestamp = null;
-const CACHE_DURATION_MS = 5 * 1000; // Cache duration set to 5 seconds
-
+const CACHE_DURATION_MS = 5 * 1000; 
 // Function to check if the cache is still valid
 const isCacheValid = () => {
   if (!cacheTimestamp) return false;
   return (Date.now() - cacheTimestamp) < CACHE_DURATION_MS;
 };
 
-// Endpoint to fetch directions with caching
+
 app.get('/directions', async (req, res) => {
+  const startTime = Date.now(); // Record start time
+  
   try {
     if (cachedRouteData && isCacheValid()) {
       console.log('Serving cached data');
+      
+      
+      const responseTime = Date.now() - startTime;
+      console.log(`Response time (cached): ${responseTime} ms`);
+      
+      // Return cached data
       res.set({
-        'Cache-Control': 'no-cache, no-store, must-revalidate', // Do not cache
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
         'Pragma': 'no-cache',
         'Expires': '0'
       });
-      res.json(cachedRouteData);
+      res.json(formatResponse(cachedRouteData));
     } else {
       console.log('Fetching new data from Google Maps Directions API');
+      
       request.get({
         url: 'https://maps.googleapis.com/maps/api/directions/json',
         qs: {
           origin: 'Chicago,IL',
           destination: 'Los+Angeles,CA',
-          key: 'AIzaSyALsQw8m8XlCfbhB5zanyEkpSaqqTg0cDE'
+          key: apiKey
         },
         json: true
       }, (error, response, body) => {
@@ -45,15 +54,17 @@ app.get('/directions', async (req, res) => {
         cacheTimestamp = Date.now();
         console.log('Fetched and cached new data');
 
-        // Set cache-control headers
+
+        const responseTime = Date.now() - startTime;
+        console.log(`Response time (non-cached): ${responseTime} ms`);
+
+        // Return new data
         res.set({
-          'Cache-Control': 'no-cache, no-store, must-revalidate', // Do not cache
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
           'Pragma': 'no-cache',
           'Expires': '0'
         });
-
-        // Return data to client
-        res.json(body);
+        res.json(formatResponse(body));
       });
     }
   } catch (error) {
@@ -61,6 +72,28 @@ app.get('/directions', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch directions' });
   }
 });
+
+const formatResponse = (data) => {
+  if (data.status !== 'OK' || !data.routes || data.routes.length === 0) {
+    return { error: 'No routes found or an error occurred.' };
+  }
+
+  const route = data.routes[0];
+  const leg = route.legs[0];
+
+  return {
+    start_address: leg.start_address,
+    end_address: leg.end_address,
+    distance: leg.distance.text,
+    duration: leg.duration.text,
+    steps: leg.steps.map((step, index) => ({
+      step_number: index + 1,
+      instruction: step.html_instructions.replace(/<[^>]+>/g, ''), // Remove HTML tags
+      distance: step.distance.text,
+      duration: step.duration.text
+    }))
+  };
+};
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
