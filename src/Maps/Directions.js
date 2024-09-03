@@ -44,7 +44,7 @@ const DirectionsMap = () => {
   const handleCalculateRoute = () => {
     setDirectionsRequest({
       origin: { lat: 52.2593, lng: -7.1101 },
-      destination: { lat: 53.4557, lng: -7.138704504048729 },
+      destination: { lat: 53.3440956, lng: -6.2674862 },
       travelMode: window.google.maps.TravelMode.DRIVING,
     });
   };
@@ -60,7 +60,7 @@ const DirectionsMap = () => {
         center={defaultCenter}
       >
         <Marker position={defaultCenter} />
-        <Marker position={{ lat: 52.24619711998666, lng: -7.138704504048729 }} />
+        <Marker position={{ lat: 53.3440956, lng: -6.2674862 }} />
         {directions && <DirectionsRenderer directions={directions} />}
       </GoogleMap>
       <button id="direct" className="calculate-route" onClick={handleCalculateRoute}>Calculate Route</button>
@@ -75,5 +75,4 @@ const DirectionsMap = () => {
     </div>
   );
 };
-
 export default DirectionsMap;
