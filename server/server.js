@@ -1,7 +1,7 @@
 const express = require('express');
 const request = require('request');
 const app = express();
-const apiKey = ''; 
+const apiKey = 'AIzaSyALsQw8m8XlCfbhB5zanyEkpSaqqTg0cDE'; 
 
 let cachedRouteData = null;
 let cacheTimestamp = null;
